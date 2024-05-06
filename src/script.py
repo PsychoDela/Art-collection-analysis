@@ -3,6 +3,7 @@ import numpy as np
 import os
 import matplotlib.pyplot as plt
 
+
 def color_analysis(image_path):
     # Read the image
     image = cv2.imread(image_path)
@@ -45,8 +46,9 @@ def analyze_images_in_years(artist_directory):
 
     return brightness_data, saturation_data, hist_rgb_data
 
+
 # Replace this directory with the path to the folder containing artist's subfolders
-artist_directory = '../img/claude-monet'
+artist_directory = '../img/edgar-degas'
 
 brightness_data, saturation_data, hist_rgb_data = analyze_images_in_years(artist_directory)
 
@@ -58,12 +60,14 @@ plt.hist(brightness_data, bins=40, color='blue', alpha=0.7)
 plt.title('Average Brightness Histogram')
 plt.xlabel('Average Brightness')
 plt.ylabel('Frequency')
+plt.savefig('brightness_histogram.png')  # Save the plot as an image
 
 plt.subplot(1, 2, 2)
 plt.hist(saturation_data, bins=40, color='green', alpha=0.7)
 plt.title('Average Saturation Histogram')
 plt.xlabel('Average Saturation')
 plt.ylabel('Frequency')
+plt.savefig('saturation_histogram.png')  # Save the plot as an image
 
 plt.tight_layout()
 plt.show()
@@ -77,8 +81,7 @@ for i in range(3):
     plt.title(f'RGB Channel {i+1} Histogram')
     plt.xlabel('Intensity')
     plt.ylabel('Frequency')
+    plt.savefig(f'rgb_channel_{i+1}_histogram.png')  # Save the plot as an image
 
 plt.tight_layout()
 plt.show()
-
-
