@@ -6,9 +6,11 @@ import matplotlib.pyplot as plt
 # Define the path to the directory containing your images
 image_dir = "../img/edgar-degas"
 
+
 # Function to calculate average channel intensity for an image
 def calculate_average_intensity(image):
     return np.mean(image, axis=(0, 1))
+
 
 # Lists to store average intensities and corresponding years
 avg_intensities_r = []
