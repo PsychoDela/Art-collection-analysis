@@ -169,7 +169,7 @@ def plot_series(files,X,Y):
         # Extract the year from the file name
         year_str = file_path.split('/')[3]
         
-        if year_str == 'portreti':
+        if year_str == '1883':
             plt.scatter(x, y, color="red", label=year_str)  # Use specific color for the specific year
         else:
             plt.scatter(x, y, color='blue', alpha=0.5)  # Use a default color for other years
@@ -225,11 +225,13 @@ folder_path = '../img/claude-monet'
 files=unpack_files(folder_path)
 #print(files)
 
-"""
+
 bm=brightness_mean(files)
+stddev=brightness_standard_deviation(files)
+"""
 sm=saturation_mean(files)
 
-stddev=brightness_standard_deviation(files)
+
 ent=entropy(files)
 
 with open('monet-brightness-mean.txt', 'r') as file:
@@ -238,10 +240,11 @@ with open('monet-brightness-mean.txt', 'r') as file:
 with open('monet-saturation-mean.txt', 'r') as file:
     sm = [float(line.strip()) for line in file]
     """
-bm=brightness_median(files)
+#bm=brightness_median(files)
 #sm=saturation_median(files)
 #plot(files,bm,sm)
 #plot(files,stddev,ent)
 #plot_time(files,bm)
 #plot_points(stddev,ent)
+plot_series(files,bm,stddev)
 
