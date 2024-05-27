@@ -4,6 +4,7 @@ import os
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
+from PIL import Image
 
 
 def brightness_mean(files):
@@ -141,17 +142,26 @@ def plot(files, X, Y):
     ax.scatter(X, Y) 
     
     for x0, y0, path in zip(X, Y,files):
-        ab = AnnotationBbox(OffsetImage(plt.imread(path), zoom=0.01), (x0, y0), frameon=False)
-        ax.add_artist(ab)
+        try:
+            # Resize the image to reduce memory usage
+            with Image.open(path) as img:
+                img.thumbnail((200, 200))  # Adjust the size as needed
+                img_array = np.array(img)
 
-    #plt.savefig('../graphs/brightness_saturation_graph.svg', format='svg', bbox_inches='tight')
+            # Convert the image to OffsetImage and add to plot
+            ab = AnnotationBbox(OffsetImage(img_array, zoom=0.1), (x0, y0), frameon=False)
+            ax.add_artist(ab)
+        except Exception as e:
+            print(f"Error loading image {path}: {e}")
+
+    #plt.savefig('../graphs/monet/brightness_saturation_mean.svg', format='svg', bbox_inches='tight')
     
     plt.show()
 
 def plot_points(X,Y):
     plt.style.use('dark_background')
     plt.scatter(X, Y, color='white', alpha=0.6)
-    plt.title('Degas Density')
+    plt.title('Monet Density')
     plt.show()
 
 def plot_series(files,X,Y):
@@ -178,21 +188,30 @@ def plot_time(files,Y):
         except ValueError:
             print(f"Warning: Unable to extract year from file path '{file_path}'")
             continue
-    """
+    
     fig, ax = plt.subplots()
     ax.scatter(years, Y) 
     
     for x0, y0, path in zip(years, Y,files):
-        ab = AnnotationBbox(OffsetImage(plt.imread(path), zoom=0.01), (x0, y0), frameon=False)
-        ax.add_artist(ab)
+        try:
+            # Resize the image to reduce memory usage
+            with Image.open(path) as img:
+                img.thumbnail((200, 200))  # Adjust the size as needed
+                img_array = np.array(img)
+
+            # Convert the image to OffsetImage and add to plot
+            ab = AnnotationBbox(OffsetImage(img_array, zoom=0.1), (x0, y0), frameon=False)
+            ax.add_artist(ab)
+        except Exception as e:
+            print(f"Error loading image {path}: {e}")
 
     plt.show()
     """
     plt.style.use('dark_background')
     plt.scatter(years, Y, color='white', alpha=0.6)
-    plt.title('Degas through time')
+    plt.title('Monet through time')
     plt.show()
-
+    """
 
 def unpack_files(directory):
     file_list = []
@@ -202,19 +221,27 @@ def unpack_files(directory):
     return file_list
 
 
-folder_path = '../img/edgar-degas'
+folder_path = '../img/claude-monet'
 files=unpack_files(folder_path)
 #print(files)
+
 """
 bm=brightness_mean(files)
 sm=saturation_mean(files)
 
 stddev=brightness_standard_deviation(files)
 ent=entropy(files)
-"""
+
+with open('monet-brightness-mean.txt', 'r') as file:
+    bm = [float(line.strip()) for line in file]
+
+with open('monet-saturation-mean.txt', 'r') as file:
+    sm = [float(line.strip()) for line in file]
+    """
 bm=brightness_median(files)
 #sm=saturation_median(files)
-
+#plot(files,bm,sm)
 #plot(files,stddev,ent)
-plot_time(files,bm)
+#plot_time(files,bm)
+#plot_points(stddev,ent)
 
